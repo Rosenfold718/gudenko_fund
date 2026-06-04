@@ -73,10 +73,8 @@ export function Marketplace({ products, categories }: MarketplaceProps) {
   }, []);
 
   const handleProductClick = (product: Product) => {
-    console.log('Product clicked:', product.name);
     setSelectedProduct(product);
     setModalOpen(true);
-    console.log('Modal should be open');
   };
 
   // Parse images JSON string if needed

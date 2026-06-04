@@ -172,6 +172,7 @@ export function ProductCard({
           <button
             type="button"
             disabled={inStock === 0}
+            onClick={handleClick}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-full",
               "text-sm font-semibold",
