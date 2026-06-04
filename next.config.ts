@@ -1,12 +1,23 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
-  /* config options here */
+  // Убираем standalone для Vercel
+  // output: "standalone",
+  
   typescript: {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  
+  // Для Vercel
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
