@@ -105,27 +105,26 @@ export function Heritage() {
               isVisible ? "animate-scale-in delay-200" : "opacity-0"
             )}
           >
-            {/* Main Card - About */}
-            <div className="relative rounded-3xl overflow-hidden shadow-xl">
-              <div className="aspect-[4/5] bg-gradient-to-br from-[#3A5FCD] to-[#5A7FDD] p-8 pattern-people">
-                <div className="h-full flex flex-col justify-between text-white">
-                  <div>
-                    <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-6">
-                      <Heart className="w-8 h-8" fill="white" />
-                    </div>
-                    <h3 className="font-display text-4xl font-bold leading-tight">
-                      О<br />НАС
-                    </h3>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <span>Фонд Гуденко</span>
-                  </div>
-                </div>
+            {/* Main Card - Family Photo */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
+              <img 
+                src="/images/family.jpg" 
+                alt="Семья Гуденко"
+                className="w-full aspect-[4/5] object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="font-display text-2xl font-bold mb-1">
+                  Семья Гуденко
+                </h3>
+                <p className="text-sm text-white/80">
+                  Основатели благотворительного фонда
+                </p>
               </div>
             </div>
 
             {/* Floating Cards */}
-            <div className="absolute -bottom-4 -left-4 rounded-2xl overflow-hidden shadow-lg transform rotate-[-4deg]">
+            <div className="absolute -bottom-4 -left-4 rounded-2xl overflow-hidden shadow-lg transform rotate-[-4deg] hover:rotate-0 transition-transform duration-300">
               <div className="aspect-square w-28 bg-gradient-to-br from-[#E62129] to-[#F15A29] p-3">
                 <div className="h-full flex flex-col items-center justify-center text-white">
                   <span className="text-3xl">❤️</span>
@@ -134,7 +133,7 @@ export function Heritage() {
               </div>
             </div>
 
-            <div className="absolute -top-4 -right-4 rounded-2xl overflow-hidden shadow-lg transform rotate-[3deg]">
+            <div className="absolute -top-4 -right-4 rounded-2xl overflow-hidden shadow-lg transform rotate-[3deg] hover:rotate-0 transition-transform duration-300">
               <div className="aspect-square w-32 bg-gradient-to-br from-[#7CDA28] to-[#F7E934] p-3">
                 <div className="h-full flex flex-col items-center justify-center text-foreground">
                   <span className="text-3xl">✨</span>

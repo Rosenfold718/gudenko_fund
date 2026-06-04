@@ -1,46 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Mail, Phone, MapPin, Download, Code2 } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const [isDownloading, setIsDownloading] = React.useState(false);
-
-  const handleDownloadProject = async () => {
-    setIsDownloading(true);
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 min timeout
-      
-      const response = await fetch('/api/download-project', {
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) throw new Error('Download failed');
-      
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'gudenko-fund-project.zip';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error('Download error:', error);
-      if (error instanceof Error && error.name === 'AbortError') {
-        alert('Превышено время ожидания. Попробуйте позже.');
-      } else {
-        alert('Ошибка при скачивании проекта. Попробуйте позже.');
-      }
-    } finally {
-      setIsDownloading(false);
-    }
-  };
 
   return (
     <footer id="contact" className="bg-foreground text-white">
@@ -160,31 +124,6 @@ export function Footer() {
               <a href="#" className="hover:text-white transition-colors">
                 Оферта
               </a>
-              
-              {/* For Developers Button */}
-              <button
-                onClick={handleDownloadProject}
-                disabled={isDownloading}
-                className={cn(
-                  "inline-flex items-center gap-2 px-4 py-2 rounded-full",
-                  "bg-gradient-to-r from-[#7CDA28] to-[#F7E934]",
-                  "text-foreground font-semibold text-xs",
-                  "hover:shadow-lg hover:scale-105",
-                  "transition-all duration-200",
-                  "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                )}
-                title="Скачать исходный код проекта"
-              >
-                <Code2 className="w-4 h-4" />
-                {isDownloading ? (
-                  <>
-                    <Download className="w-4 h-4 animate-bounce" />
-                    Скачивание...
-                  </>
-                ) : (
-                  "Для разработчиков"
-                )}
-              </button>
             </div>
           </div>
         </div>
