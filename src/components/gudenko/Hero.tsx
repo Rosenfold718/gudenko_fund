@@ -20,9 +20,6 @@ export function Hero() {
         <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#E62129]/10 to-[#FF6B35]/10 blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#3A5FCD]/10 to-[#6BB6FF]/10 blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-[#7CDA28]/5 to-[#F7E934]/5 blur-3xl" />
-        
-        {/* Pattern overlay */}
-        <div className="absolute inset-0 opacity-30 pattern-hearts" />
       </div>
 
       {/* Content */}
@@ -109,41 +106,49 @@ export function Hero() {
             )}
           >
             {/* Main Card - Healthcare */}
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-              <div className="aspect-[4/5] gradient-healthcare p-8 pattern-hearts">
-                <div className="h-full flex flex-col justify-between text-white">
-                  <div>
-                    <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-6">
-                      <Heart className="w-8 h-8" fill="white" />
-                    </div>
-                    <h3 className="font-display text-4xl font-bold leading-tight">
-                      ЗДРАВО<br />ОХРА<br />НЕНИЕ
-                    </h3>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium opacity-80">Подробнее</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
+              <img 
+                src="/images/healthcare.jpg" 
+                alt="Здравоохранение"
+                className="w-full aspect-[4/5] object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="font-display text-3xl font-bold mb-2">
+                  ЗДРАВООХРАНЕНИЕ
+                </h3>
+                <p className="text-sm text-white/80 mb-3">
+                  Помогаем получать качественную медицинскую помощь
+                </p>
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <span>Подробнее</span>
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
             </div>
 
             {/* Floating Cards */}
-            <div className="absolute -bottom-6 -left-6 rounded-2xl overflow-hidden shadow-xl transform rotate-[4deg] hover:rotate-0 transition-transform duration-500">
-              <div className="aspect-square w-40 gradient-education p-4">
-                <div className="h-full flex flex-col justify-center items-center text-white text-center">
-                  <span className="text-3xl mb-2">📚</span>
-                  <span className="font-display text-sm font-bold">ОБРАЗОВАНИЕ</span>
-                </div>
+            <div className="absolute -bottom-8 -left-8 rounded-2xl overflow-hidden shadow-xl transform hover:scale-105 transition-transform duration-500">
+              <img 
+                src="/images/education.jpg" 
+                alt="Образование"
+                className="w-48 h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                <span className="font-display text-sm font-bold">ОБРАЗОВАНИЕ</span>
               </div>
             </div>
 
-            <div className="absolute -top-4 -right-4 rounded-2xl overflow-hidden shadow-xl transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500">
-              <div className="aspect-square w-36 gradient-ecology p-4">
-                <div className="h-full flex flex-col justify-center items-center text-white text-center">
-                  <span className="text-3xl mb-2">🌱</span>
-                  <span className="font-display text-sm font-bold">ЭКОЛОГИЯ</span>
-                </div>
+            <div className="absolute -top-6 -right-6 rounded-2xl overflow-hidden shadow-xl transform hover:scale-105 transition-transform duration-500">
+              <img 
+                src="/images/ecology.jpg" 
+                alt="Экология"
+                className="w-44 h-44 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                <span className="font-display text-sm font-bold">ЭКОЛОГИЯ</span>
               </div>
             </div>
           </div>

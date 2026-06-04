@@ -86,7 +86,7 @@ export function Header() {
             <img 
               src="/images/logo.jpg" 
               alt="Фонд Гуденко" 
-              className="w-10 h-10 rounded-xl object-cover"
+              className="w-14 h-14 rounded-xl object-cover shadow-md"
             />
             <span className="font-display text-xl font-bold text-foreground group-hover:text-[#E62129] transition-colors">
               Фонд Гуденко
