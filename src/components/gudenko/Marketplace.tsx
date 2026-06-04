@@ -84,11 +84,6 @@ export function Marketplace({ products, categories }: MarketplaceProps) {
             isVisible ? "animate-fade-in-up" : "opacity-0"
           )}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#7CDA28]/10 to-[#F7E934]/10 border border-[#7CDA28]/20 mb-6">
-            <ShoppingBag className="w-4 h-4 text-[#7CDA28]" />
-            <span className="text-sm font-medium text-[#7CDA28]">100% в благотворительность</span>
-          </div>
-          
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Магазин добра
           </h2>

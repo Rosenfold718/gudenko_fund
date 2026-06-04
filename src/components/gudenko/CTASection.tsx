@@ -12,7 +12,6 @@ const ctaConfigs = {
   donate: {
     id: "donate",
     gradient: "from-[#E62129] to-[#F15A29]",
-    pattern: "pattern-hearts",
     icon: Heart,
     title: "ПОЖЕРТВОВАТЬ",
     description: "Каждое пожертвование — это реальная помощь тем, кто в ней нуждается. Поддержите наши программы любой суммой.",
@@ -23,7 +22,6 @@ const ctaConfigs = {
   help: {
     id: "help",
     gradient: "from-[#3A5FCD] to-[#5A7FDD]",
-    pattern: "pattern-people",
     icon: Phone,
     title: "ПОЛУЧИТЬ ПОМОЩЬ",
     description: "Если вы оказались в трудной жизненной ситуации, мы готовы помочь. Оставьте заявку, и мы свяжемся с вами.",
@@ -34,7 +32,6 @@ const ctaConfigs = {
   volunteer: {
     id: "volunteer",
     gradient: "from-[#7CDA28] to-[#F7E934]",
-    pattern: "pattern-leaves",
     icon: Users,
     title: "СТАТЬ ВОЛОНТЁРОМ",
     description: "Присоединяйтесь к нашей команде! Вместе мы можем сделать больше. Станьте частью большого доброго дела.",
@@ -78,12 +75,19 @@ export function CTASection({ variant }: CTASectionProps) {
         <div
           className={cn(
             "relative rounded-3xl overflow-hidden",
-            "bg-gradient-to-br",
-            config.gradient,
-            config.pattern,
             isVisible ? "animate-scale-in" : "opacity-0"
           )}
         >
+          {/* Gradient Background */}
+          <div className={cn(
+            "absolute inset-0 bg-gradient-to-br",
+            config.gradient
+          )} />
+          
+          {/* Pattern Overlay */}
+          <div className="absolute inset-0 opacity-20 pattern-hearts" />
+          
+          {/* Content */}
           <div className="relative p-8 lg:p-12">
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               {/* Left Side - Title */}

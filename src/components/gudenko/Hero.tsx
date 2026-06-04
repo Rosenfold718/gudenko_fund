@@ -35,14 +35,6 @@ export function Hero() {
               isVisible ? "animate-fade-in-up" : "opacity-0"
             )}
           >
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#E62129]/10 to-[#FF6B35]/10 border border-[#E62129]/20">
-              <Heart className="w-4 h-4 text-[#E62129]" fill="#E62129" />
-              <span className="text-sm font-medium text-[#E62129]">
-                Более 10 лет помощи
-              </span>
-            </div>
-
             {/* Headline */}
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-[1.1]">
               Помогаем вместе —
@@ -158,18 +150,7 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <a
-          href="#about"
-          className="flex flex-col items-center text-muted-foreground hover:text-[#E62129] transition-colors"
-        >
-          <span className="text-xs uppercase tracking-widest mb-2">Далее</span>
-          <div className="w-6 h-10 rounded-full border-2 border-current flex items-start justify-center p-1">
-            <div className="w-1.5 h-3 rounded-full bg-current animate-bounce" />
-          </div>
-        </a>
-      </div>
+
     </section>
   );
 }

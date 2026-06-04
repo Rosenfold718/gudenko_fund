@@ -41,12 +41,6 @@ export function Heritage() {
               isVisible ? "animate-fade-in-up" : "opacity-0"
             )}
           >
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3A5FCD]/10 border border-[#3A5FCD]/20 mb-6">
-              <Heart className="w-4 h-4 text-[#3A5FCD]" fill="#3A5FCD" />
-              <span className="text-sm font-medium text-[#3A5FCD]">О фонде</span>
-            </div>
-
             {/* Title */}
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
               Семья Гуденко —
