@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════
 // GUDENKO FUND — Seed Data
-// Initial data for categories, products, stories, pillars
+// Gudiki toys from brandbook
 // ═══════════════════════════════════════════════════════════════
 
 import { PrismaClient } from '@prisma/client';
@@ -8,67 +8,51 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding database...');
+  console.log('🌱 Seeding Gudiki database...');
+
+  // Clean existing data
+  console.log('🧹 Cleaning existing data...');
+  await prisma.product.deleteMany({});
+  await prisma.category.deleteMany({});
+  console.log('✅ Data cleaned');
 
   // ═══════════════════════════════════════════════════════════════
-  // CATEGORIES
+  // CATEGORIES - Gudiki types
   // ═══════════════════════════════════════════════════════════════
   console.log('📦 Creating categories...');
   
   const categories = await Promise.all([
     prisma.category.upsert({
-      where: { slug: 'bears' },
+      where: { slug: 'gudiki-basic' },
       update: {},
       create: {
-        name: 'Медведи',
-        slug: 'bears',
-        description: 'Классические плюшевые мишки ручной работы. Мягкие, тёплые и невероятно обаятельные.',
+        name: 'Гудики',
+        slug: 'gudiki-basic',
+        description: 'Мягкие игрушки Гудики — каждый со своим уникальным характером и историей.',
         icon: '🧸',
         sortOrder: 1,
       },
     }),
     prisma.category.upsert({
-      where: { slug: 'rabbits' },
+      where: { slug: 'surprise-packs' },
       update: {},
       create: {
-        name: 'Зайцы',
-        slug: 'rabbits',
-        description: 'Пушистые зайчики разных размеров. Идеальный подарок для детей и взрослых.',
-        icon: '🐰',
+        name: 'Сюрприз-паки',
+        slug: 'surprise-packs',
+        description: 'Наборы Гудиков с сертификатами и подарками. Идеально для подарка.',
+        icon: '🎁',
         sortOrder: 2,
       },
     }),
     prisma.category.upsert({
-      where: { slug: 'dolls' },
+      where: { slug: 'limited' },
       update: {},
       create: {
-        name: 'Куклы',
-        slug: 'dolls',
-        description: 'Текстильные куклы ручной работы с уникальным характером и историей.',
-        icon: '🎀',
+        name: 'Лимитированные',
+        slug: 'limited',
+        description: 'Редкие и секретные Гудики. Выпускаются ограниченными тиражами.',
+        icon: '⭐',
         sortOrder: 3,
-      },
-    }),
-    prisma.category.upsert({
-      where: { slug: 'educational' },
-      update: {},
-      create: {
-        name: 'Развивающие',
-        slug: 'educational',
-        description: 'Игрушки для развития мелкой моторики, воображения и творческих способностей.',
-        icon: '🎨',
-        sortOrder: 4,
-      },
-    }),
-    prisma.category.upsert({
-      where: { slug: 'gift-sets' },
-      update: {},
-      create: {
-        name: 'Подарочные наборы',
-        slug: 'gift-sets',
-        description: 'Готовые комплекты для особых случаев. Упакованы в фирменную коробку.',
-        icon: '🎁',
-        sortOrder: 5,
       },
     }),
   ]);
@@ -76,254 +60,377 @@ async function main() {
   console.log(`✅ Created ${categories.length} categories`);
 
   // ═══════════════════════════════════════════════════════════════
-  // PRODUCTS
+  // PRODUCTS - Gudiki toys
   // ═══════════════════════════════════════════════════════════════
-  console.log('🧸 Creating products...');
+  console.log('🧸 Creating Gudiki products...');
 
-  const bearsCategory = categories.find(c => c.slug === 'bears')!;
-  const rabbitsCategory = categories.find(c => c.slug === 'rabbits')!;
-  const dollsCategory = categories.find(c => c.slug === 'dolls')!;
-  const educationalCategory = categories.find(c => c.slug === 'educational')!;
-  const giftSetsCategory = categories.find(c => c.slug === 'gift-sets')!;
+  const gudikiCategory = categories.find(c => c.slug === 'gudiki-basic')!;
+  const surpriseCategory = categories.find(c => c.slug === 'surprise-packs')!;
+  const limitedCategory = categories.find(c => c.slug === 'limited')!;
 
   const products = await Promise.all([
-    // Медведи
+    // Листик - флагман экологии
     prisma.product.upsert({
-      where: { slug: 'mishka-tepa' },
+      where: { slug: 'gudik-listik' },
       update: {},
       create: {
-        name: 'Мишка Тёпа',
-        slug: 'mishka-tepa',
-        description: 'Большой плюшевый медведь ручной работы из премиального хлопка. Мягкий, уютный и невероятно обаятельный. Наполнитель — гипоаллергенный синтепух. Можно стирать в машинке при 30°C.',
-        shortDesc: 'Большой плюшевый мишка из премиального хлопка',
-        price: 250000, // 2,500 ₽
-        comparePrice: 300000,
-        mainImage: '/images/products/bear-tepa.jpg',
-        images: JSON.stringify(['/images/products/bear-tepa.jpg', '/images/products/bear-tepa-2.jpg']),
-        categoryId: bearsCategory.id,
-        inStock: 5,
-        sku: 'GF-BEAR-001',
-        height: 35,
-        weight: 450,
-        material: 'Премиальный хлопок',
-        filler: 'Гипоаллергенный синтепух',
+        name: 'Листик',
+        slug: 'gudik-listik',
+        description: `Энергичный и неутомимый Гудик, который хочет спасти мир прямо сейчас! Из макушки растёт маленький росток — он "всегда растёт".
+
+Форма: Круглое тело с заострёнными ушками-листочками наверху.
+Цвет: Салатовый + светло-зелёный.
+Аксессуар: Маленький рюкзачок из коричневого фетра.
+Характер: Энергичный, неутомимый, светлый. Хочет спасти мир СЕЙЧАС.
+
+«Каждый может сделать мир лучше — достаточно начать с себя»`,
+        shortDesc: 'Экологический Гудик с ростком на макушке',
+        price: 100000, // 1,000 ₽
+        mainImage: '/images/gudiki/listik.png',
+        images: JSON.stringify(['/images/gudiki/listik.png']),
+        categoryId: gudikiCategory.id,
+        inStock: 20,
+        sku: 'GUD-LISTIK-001',
+        height: 15,
+        weight: 150,
+        material: 'Фетр зелёный 2мм, фетр коричневый',
+        filler: 'Холофайбер',
         rating: 4.9,
+        reviewsCount: 28,
+        isFeatured: true,
+      },
+    }),
+
+    // Семьяш - ядро фонда
+    prisma.product.upsert({
+      where: { slug: 'gudik-semyash' },
+      update: {},
+      create: {
+        name: 'Семьяш',
+        slug: 'gudik-semyash',
+        description: `Самый мудрый Гудик. Не говорит — показывает. Тихий, но всегда рядом. На груди — домик-кувалочка, символ дома.
+
+Форма: Тёплое круглое тело с маленькими "руками-завитками".
+Цвет: Тёплый бежевый + коричневый.
+Странная деталь: На теле вышиты инициалы "Г" (Gudenko) — фамильный герб.
+Аксессуар: Крошечный домик-кувалочка (символ дома).
+Характер: Самый мудрый Гудик. Не говорит — показывает.
+
+«Семья — это не кровные узы. Это люди, рядом с которыми ты становишься лучше»`,
+        shortDesc: 'Мудрый Гудик — ядро фонда (редкий)',
+        price: 100000,
+        mainImage: '/images/gudiki/semyash.png',
+        images: JSON.stringify(['/images/gudiki/semyash.png']),
+        categoryId: limitedCategory.id,
+        inStock: 5,
+        sku: 'GUD-SEMYASH-001',
+        height: 15,
+        weight: 160,
+        material: 'Фетр бежевый, фетр коричневый',
+        filler: 'Холофайбер',
+        rating: 5.0,
         reviewsCount: 12,
         isFeatured: true,
       },
     }),
+
+    // Тихоня - секретный
     prisma.product.upsert({
-      where: { slug: 'mishka-mikhail' },
+      where: { slug: 'gudik-tikhonya' },
       update: {},
       create: {
-        name: 'Мишка Михаил',
-        slug: 'mishka-mikhail',
-        description: 'Классический бурый медведь с добрыми глазами. Сшит из мохера премиум-класса, нос вышит вручную. Идеальный компаньон для ребёнка.',
-        shortDesc: 'Классический бурый мишка из мохера',
-        price: 380000,
-        mainImage: '/images/products/bear-mikhail.jpg',
-        images: JSON.stringify(['/images/products/bear-mikhail.jpg']),
-        categoryId: bearsCategory.id,
-        inStock: 3,
-        sku: 'GF-BEAR-002',
-        height: 40,
-        weight: 520,
-        material: 'Мохер премиум',
-        filler: 'Синтепух',
-        rating: 5.0,
-        reviewsCount: 8,
-        isFeatured: true,
-      },
-    }),
-    prisma.product.upsert({
-      where: { slug: 'medvezhonok-umka' },
-      update: {},
-      create: {
-        name: 'Медвежонок Умка',
-        slug: 'medvezhonok-umka',
-        description: 'Маленький белый медвежонок — символ чистоты и доброты. Мягкий и уютный, помещается в детской ладошке.',
-        shortDesc: 'Маленький белый медвежонок',
+        name: 'Тихоня',
+        slug: 'gudik-tikhonya',
+        description: `Единственный Гудик, который "спит". Глаза закрыты. Но иногда... кто-то видит, как он моргает. Легенда гласит, что он — самый старый Гудик, видевший рождение мира.
+
+Форма: Как листик, но целиком тёмно-синий с вышитыми звёздами.
+Цвет: Тёмно-синий (midnight) + серебряные звёзды.
+Странная деталь: Глаза ЗАКРЫТЫ.
+Аксессуар: Звёздочка-подвеска (можно повесить на рюкзак).
+Характер: Никто не знает...
+
+«Тихая доброта — самая сильная»`,
+        shortDesc: 'Секретный Гудик со звёздами (1 из 20)',
         price: 150000,
-        mainImage: '/images/products/bear-umka.jpg',
-        images: JSON.stringify(['/images/products/bear-umka.jpg']),
-        categoryId: bearsCategory.id,
-        inStock: 12,
-        sku: 'GF-BEAR-003',
-        height: 20,
-        weight: 180,
-        material: 'Хлопок',
-        filler: 'Синтепух',
-        rating: 4.8,
-        reviewsCount: 23,
-        isNew: true,
-      },
-    }),
-
-    // Зайцы
-    prisma.product.upsert({
-      where: { slug: 'zaika-pushok' },
-      update: {},
-      create: {
-        name: 'Зайка Пушок',
-        slug: 'zaika-pushok',
-        description: 'Невероятно мягкий зайчик из велюра. Длинные ушки удобно держать в руках. Подходит для самых маленьких — с 6 месяцев.',
-        shortDesc: 'Мягкий велюровый зайчик',
-        price: 180000,
-        mainImage: '/images/products/rabbit-pushok.jpg',
-        images: JSON.stringify(['/images/products/rabbit-pushok.jpg']),
-        categoryId: rabbitsCategory.id,
-        inStock: 8,
-        sku: 'GF-RABBIT-001',
-        height: 28,
-        weight: 200,
-        material: 'Велюр',
-        filler: 'Синтепух',
-        rating: 4.9,
-        reviewsCount: 15,
-        isFeatured: true,
-      },
-    }),
-    prisma.product.upsert({
-      where: { slug: 'zaika-snezhok' },
-      update: {},
-      create: {
-        name: 'Зайка Снежок',
-        slug: 'zaika-snezhok',
-        description: 'Белоснежный зайчик с розовыми ушками. Отличный подарок на новоселье или крещение.',
-        shortDesc: 'Белоснежный зайчик с розовыми ушками',
-        price: 220000,
-        mainImage: '/images/products/rabbit-snezhok.jpg',
-        images: JSON.stringify(['/images/products/rabbit-snezhok.jpg']),
-        categoryId: rabbitsCategory.id,
-        inStock: 6,
-        sku: 'GF-RABBIT-002',
-        height: 32,
-        weight: 240,
-        material: 'Хлопок',
-        filler: 'Синтепух',
-        rating: 4.7,
-        reviewsCount: 9,
-      },
-    }),
-
-    // Куклы
-    prisma.product.upsert({
-      where: { slug: 'kukla-masha' },
-      update: {},
-      create: {
-        name: 'Кукла Маша',
-        slug: 'kukla-masha',
-        description: 'Текстильная кукла с русой косой и вышитым лицом. Платье можно снимать и менять. Каждая кукла — уникальна.',
-        shortDesc: 'Текстильная кукла с русой косой',
-        price: 320000,
-        mainImage: '/images/products/doll-masha.jpg',
-        images: JSON.stringify(['/images/products/doll-masha.jpg']),
-        categoryId: dollsCategory.id,
-        inStock: 4,
-        sku: 'GF-DOLL-001',
-        height: 35,
-        weight: 300,
-        material: 'Хлопок, трикотаж',
-        filler: 'Синтепух',
+        mainImage: '/images/gudiki/tikhonya.png',
+        images: JSON.stringify(['/images/gudiki/tikhonya.png']),
+        categoryId: limitedCategory.id,
+        inStock: 3,
+        sku: 'GUD-TIKHON-001',
+        height: 15,
+        weight: 140,
+        material: 'Фетр тёмно-синий, нитки серебряные',
+        filler: 'Холофайбер',
         rating: 5.0,
         reviewsCount: 7,
         isFeatured: true,
       },
     }),
-    prisma.product.upsert({
-      where: { slug: 'kukla-dasha' },
-      update: {},
-      create: {
-        name: 'Кукла Даша',
-        slug: 'kukla-dasha',
-        description: 'Кукла-подружка с рыжими косичками и веснушками. Сшита из натуральных тканей, одежда съёмная.',
-        shortDesc: 'Кукла с рыжими косичками',
-        price: 350000,
-        mainImage: '/images/products/doll-dasha.jpg',
-        images: JSON.stringify(['/images/products/doll-dasha.jpg']),
-        categoryId: dollsCategory.id,
-        inStock: 3,
-        sku: 'GF-DOLL-002',
-        height: 38,
-        weight: 320,
-        material: 'Хлопок, лён',
-        filler: 'Синтепух',
-        rating: 4.8,
-        reviewsCount: 5,
-        isNew: true,
-      },
-    }),
 
-    // Развивающие
+    // Шармо
     prisma.product.upsert({
-      where: { slug: 'taktlniy-kubik' },
+      where: { slug: 'gudik-sharmo' },
       update: {},
       create: {
-        name: 'Тактильный кубик',
-        slug: 'taktlniy-kubik',
-        description: 'Развивающий куб с 6 разными текстурами: гладкий, шершавый, мягкий, шуршащий, вязаный и тканевый. Развивает мелкую моторику.',
-        shortDesc: 'Развивающий куб с разными текстурами',
-        price: 120000,
-        mainImage: '/images/products/cube-tactile.jpg',
-        images: JSON.stringify(['/images/products/cube-tactile.jpg']),
-        categoryId: educationalCategory.id,
+        name: 'Шармо',
+        slug: 'gudik-sharmo',
+        description: `Обнимает всех. Не понимает, что такое "чужой". Сердце из двух полукруглых половин разного цвета — намёк на "разных, но вместе".
+
+Форма: Сердце из двух полукруглых половин.
+Цвет: Коралловый + персиковый.
+Странная деталь: Две половины разного цвета и ткани.
+Аксессуар: Маленький флажок с символом дружбы.
+Характер: Обнимает всех. Не понимает, что такое "чужой".
+
+«Сила — не в том, чтобы быть таким же. Сила — в том, чтобы быть рядом»`,
+        shortDesc: 'Гудик-сердце для равных возможностей',
+        price: 100000,
+        mainImage: '/images/gudiki/sharmo.png',
+        images: JSON.stringify(['/images/gudiki/sharmo.png']),
+        categoryId: gudikiCategory.id,
         inStock: 15,
-        sku: 'GF-EDU-001',
-        height: 12,
-        weight: 150,
-        material: 'Хлопок, велюр, флис',
-        filler: 'Синтепух',
+        sku: 'GUD-SHARMO-001',
+        height: 14,
+        weight: 130,
+        material: 'Фетр коралловый, фетр персиковый',
+        filler: 'Холофайбер',
         rating: 4.9,
-        reviewsCount: 31,
+        reviewsCount: 21,
         isFeatured: true,
       },
     }),
+
+    // Плюшкин
     prisma.product.upsert({
-      where: { slug: 'girlyanda-shnurovka' },
+      where: { slug: 'gudik-plyushkin' },
       update: {},
       create: {
-        name: 'Гирлянда-шнуровка',
-        slug: 'girlyanda-shnurovka',
-        description: 'Деревянные бусины и текстильные элементы, которые нужно нанизывать на шнурок. Развивает усидчивость и координацию.',
-        shortDesc: 'Развивающая шнуровка с бусинами',
-        price: 95000,
-        mainImage: '/images/products/lacing.jpg',
-        images: JSON.stringify(['/images/products/lacing.jpg']),
-        categoryId: educationalCategory.id,
-        inStock: 20,
-        sku: 'GF-EDU-002',
-        height: 5,
-        weight: 100,
-        material: 'Дерево, хлопок',
-        filler: null,
-        rating: 4.7,
-        reviewsCount: 18,
+        name: 'Плюшкин',
+        slug: 'gudik-plyushkin',
+        description: `Серьёзный для Гудика. Не шутит про здоровье. Но если кто-то плачет — просто обнимает. Каплевидное тело с круглой "шапочкой-крестом".
+
+Форма: Каплевидное тело с круглой "шапочкой-крестом".
+Цвет: Мятный + белый.
+Странная деталь: Одна ручка — фетровый шприц-бульбулятор.
+Аксессуар: Фетровая сумочка-аптечка (открывается, внутри — пластырь-сердечко).
+Характер: Серьёзный для Гудика. Не шутит про здоровье.
+
+«Забота о себе — это тоже доброе дело»`,
+        shortDesc: 'Гудик-доктор со шприцом и аптечкой',
+        price: 100000,
+        mainImage: '/images/gudiki/plyushkin.png',
+        images: JSON.stringify(['/images/gudiki/plyushkin.png']),
+        categoryId: gudikiCategory.id,
+        inStock: 12,
+        sku: 'GUD-PLYUSH-001',
+        height: 15,
+        weight: 150,
+        material: 'Фетр мятный, фетр белый',
+        filler: 'Холофайбер',
+        rating: 4.8,
+        reviewsCount: 16,
+        isFeatured: true,
+      },
+    }),
+
+    // Книжка
+    prisma.product.upsert({
+      where: { slug: 'gudik-knizhka' },
+      update: {},
+      create: {
+        name: 'Книжка',
+        slug: 'gudik-knizhka',
+        description: `Всегда читает, задаёт вопросы, "застревает" в книгах. Тело можно "перелистать" — слои разного цвета.
+
+Форма: Квадратное тело из слоёв ткани-"страниц".
+Цвет: Небесно-голубой + белый + жёлтый.
+Странная деталь: Тело можно "перелистать" — слои разного цвета.
+Аксессуар: Маленькие фетровые очки на пуговице.
+Характер: Всегда читает, задаёт вопросы.
+
+«Знание — это доброта, которой можно поделиться бесконечно»`,
+        shortDesc: 'Гудик-книжка для образования',
+        price: 100000,
+        mainImage: '/images/gudiki/knizhka.png',
+        images: JSON.stringify(['/images/gudiki/knizhka.png']),
+        categoryId: gudikiCategory.id,
+        inStock: 18,
+        sku: 'GUD-KNIZH-001',
+        height: 14,
+        weight: 140,
+        material: 'Фетр голубой, белый, жёлтый',
+        filler: 'Холофайбер',
+        rating: 4.9,
+        reviewsCount: 19,
         isNew: true,
       },
     }),
 
-    // Подарочные наборы
+    // Маляр
     prisma.product.upsert({
-      where: { slug: 'podarok-novorozhdennomu' },
+      where: { slug: 'gudik-malyar' },
       update: {},
       create: {
-        name: 'Подарок новорождённому',
-        slug: 'podarok-novorozhdennomu',
-        description: 'Набор для новорождённого: мягкий зайка, тактильный платочек и прорезыватель из натурального дерева. Упаковано в фирменную коробку.',
-        shortDesc: 'Набор для новорождённого в фирменной упаковке',
-        price: 450000,
-        mainImage: '/images/products/gift-newborn.jpg',
-        images: JSON.stringify(['/images/products/gift-newborn.jpg']),
-        categoryId: giftSetsCategory.id,
-        inStock: 6,
-        sku: 'GF-GIFT-001',
-        height: 25,
-        weight: 400,
-        material: 'Хлопок, дерево',
-        filler: 'Синтепух',
-        rating: 5.0,
+        name: 'Маляр',
+        slug: 'gudik-malyar',
+        description: `Видит красоту там, где другие не видят. Раскрашивает всё подряд. Округлое тело с одним длинным "ушком"-кистью.
+
+Форма: Округлое тело с одним длинным "ушком"-кистью.
+Цвет: Белый + разноцветные пятнышки-брызги.
+Странная деталь: На теле — контрастное "пятно" цвета (светоотражающая нить).
+Аксессуар: Фетровый берет + мини-палитра.
+Характер: Видит красоту там, где другие не видят.
+
+«Каждый человек — художник своей жизни»`,
+        shortDesc: 'Гудик-художник с кисточкой',
+        price: 100000,
+        mainImage: '/images/gudiki/malyar.png',
+        images: JSON.stringify(['/images/gudiki/malyar.png']),
+        categoryId: gudikiCategory.id,
+        inStock: 14,
+        sku: 'GUD-MALYAR-001',
+        height: 15,
+        weight: 145,
+        material: 'Фетр белый, разноцветный',
+        filler: 'Холофайбер',
+        rating: 4.8,
         reviewsCount: 14,
+        isNew: true,
+      },
+    }),
+
+    // ═══════════════════════════════════════════════════════════════
+    // SURPRISE PACKS
+    // ═══════════════════════════════════════════════════════════════
+
+    // Бронза
+    prisma.product.upsert({
+      where: { slug: 'pack-bronze' },
+      update: {},
+      create: {
+        name: 'Сюрприз-пак «Бронза»',
+        slug: 'pack-bronze',
+        description: `Начните коллекцию Гудиков! В наборе:
+• 1 сюрприз-пак со случайным Гудиком
+• Сертификат «Я создал Гудика»
+
+Шанс выпадения редких Гудиков:
+• Семьяш — 10%
+• Тихоня — 5%`,
+        shortDesc: '1 сюрприз-пак + сертификат',
+        price: 50000, // 500 ₽
+        mainImage: '/images/gudiki/pack-bronze.png',
+        images: JSON.stringify(['/images/gudiki/pack-bronze.png']),
+        categoryId: surpriseCategory.id,
+        inStock: 100,
+        sku: 'PACK-BRONZE',
+        rating: 4.7,
+        reviewsCount: 45,
+      },
+    }),
+
+    // Серебро
+    prisma.product.upsert({
+      where: { slug: 'pack-silver' },
+      update: {},
+      create: {
+        name: 'Сюрприз-пак «Серебро»',
+        slug: 'pack-silver',
+        description: `Выберите своего Гудика! В наборе:
+• Выбор конкретного Гудика из базовой серии
+• Сертификат «Я создал Гудика»
+• Открытка с историей персонажа
+
+Доступные Гудики: Листик, Шармо, Плюшкин, Книжка, Маляр`,
+        shortDesc: 'Выбор Гудика + сертификат + открытка',
+        price: 100000, // 1,000 ₽
+        mainImage: '/images/gudiki/pack-silver.png',
+        images: JSON.stringify(['/images/gudiki/pack-silver.png']),
+        categoryId: surpriseCategory.id,
+        inStock: 50,
+        sku: 'PACK-SILVER',
+        rating: 4.9,
+        reviewsCount: 32,
         isFeatured: true,
+      },
+    }),
+
+    // Золото
+    prisma.product.upsert({
+      where: { slug: 'pack-gold' },
+      update: {},
+      create: {
+        name: 'Сюрприз-пак «Золото»',
+        slug: 'pack-gold',
+        description: `Большой Гудик для обнимашек! В наборе:
+• Гудик 25 см (обнимашка) на выбор
+• Сертификат «Я создал Гудика»
+• История персонажа в красивой упаковке
+• Значок фонда
+
+Доступные Гудики: Листик, Шармо, Плюшкин`,
+        shortDesc: 'Гудик 25 см + сертификат + значок',
+        price: 250000, // 2,500 ₽
+        mainImage: '/images/gudiki/pack-gold.png',
+        images: JSON.stringify(['/images/gudiki/pack-gold.png']),
+        categoryId: surpriseCategory.id,
+        inStock: 25,
+        sku: 'PACK-GOLD',
+        rating: 5.0,
+        reviewsCount: 18,
+        isFeatured: true,
+      },
+    }),
+
+    // Платина
+    prisma.product.upsert({
+      where: { slug: 'pack-platinum' },
+      update: {},
+      create: {
+        name: 'Сюрприз-пак «Платина»',
+        slug: 'pack-platinum',
+        description: `Полная коллекция «Первые»! В наборе:
+• Все 7 Гудиков серии «Первые»
+• Книга сказок о Гудиках
+• Благодарность на сайте фонда
+• Подарочная упаковка
+
+В набор входят: Листик, Шармо, Плюшкин, Книжка, Маляр, Семьяш, Тихоня`,
+        shortDesc: 'Весь набор «Первые» (7 шт) + книга сказок',
+        price: 1000000, // 10,000 ₽
+        mainImage: '/images/gudiki/pack-platinum.png',
+        images: JSON.stringify(['/images/gudiki/pack-platinum.png']),
+        categoryId: surpriseCategory.id,
+        inStock: 5,
+        sku: 'PACK-PLATINUM',
+        rating: 5.0,
+        reviewsCount: 8,
+      },
+    }),
+
+    // Меценат
+    prisma.product.upsert({
+      where: { slug: 'pack-maecenas' },
+      update: {},
+      create: {
+        name: 'Сюрприз-пак «Меценат»',
+        slug: 'pack-maecenas',
+        description: `Станьте создателем нового Гудика! В наборе:
+• Личный Гудик «на заказ» по вашему желанию
+• Упоминание как создателя персонажа в брендбуке
+• Полная коллекция Гудиков
+• Встреча с командой фонда
+
+После покупки мы свяжемся с вами для обсуждения деталей.`,
+        shortDesc: 'Личный Гудик на заказ + упоминание как создателя',
+        price: 2500000, // 25,000 ₽
+        mainImage: '/images/gudiki/pack-maecenas.png',
+        images: JSON.stringify(['/images/gudiki/pack-maecenas.png']),
+        categoryId: surpriseCategory.id,
+        inStock: 10,
+        sku: 'PACK-MAECENAS',
+        rating: 5.0,
+        reviewsCount: 3,
       },
     }),
   ]);
@@ -331,7 +438,7 @@ async function main() {
   console.log(`✅ Created ${products.length} products`);
 
   // ═══════════════════════════════════════════════════════════════
-  // PILLARS (Направления работы фонда)
+  // PILLARS
   // ═══════════════════════════════════════════════════════════════
   console.log('🎯 Creating pillars...');
 
@@ -342,7 +449,7 @@ async function main() {
       create: {
         title: 'Образование',
         slug: 'education',
-        description: 'Поддержка талантливых студентов и исследователей. Стипендии, гранты и образовательные программы для тех, кто хочет менять мир к лучшему.',
+        description: 'Поддержка талантливых студентов и исследователей. Стипендии, гранты и образовательные программы.',
         icon: '📚',
         sortOrder: 1,
       },
@@ -364,7 +471,7 @@ async function main() {
       create: {
         title: 'Социальная поддержка',
         slug: 'social',
-        description: 'Помощь семьям в трудных жизненных ситуациях. Адресная поддержка, продуктовая помощь, решение бытовых проблем.',
+        description: 'Помощь семьям в трудных жизненных ситуациях. Адресная поддержка, продуктовая помощь.',
         icon: '🤝',
         sortOrder: 3,
       },
@@ -375,7 +482,7 @@ async function main() {
       create: {
         title: 'Культура',
         slug: 'culture',
-        description: 'Сохранение культурного наследия и поддержка искусства. Музеи, театры, выставки и образовательные проекты.',
+        description: 'Сохранение культурного наследия и поддержка искусства. Музеи, театры, выставки.',
         icon: '🎭',
         sortOrder: 4,
       },
@@ -386,7 +493,7 @@ async function main() {
       create: {
         title: 'Экология',
         slug: 'ecology',
-        description: 'Защита окружающей среды и развитие экологического сознания. Посадка деревьев, очистка территорий, экологическое просвещение.',
+        description: 'Защита окружающей среды и развитие экологического сознания. Посадка деревьев, экологическое просвещение.',
         icon: '🌱',
         sortOrder: 5,
       },
@@ -417,7 +524,7 @@ async function main() {
       update: {},
       create: {
         id: 'stat-toys',
-        label: 'Игрушек создано',
+        label: 'Гудиков создано',
         value: 1250,
         suffix: '+',
         icon: '🧸',
@@ -436,29 +543,6 @@ async function main() {
         sortOrder: 3,
       },
     }),
-    prisma.impactStat.upsert({
-      where: { id: 'stat-years' },
-      update: {},
-      create: {
-        id: 'stat-years',
-        label: 'Лет работы',
-        value: 12,
-        suffix: '+',
-        icon: '📅',
-        sortOrder: 4,
-      },
-    }),
-    prisma.impactStat.upsert({
-      where: { id: 'stat-projects' },
-      update: {},
-      create: {
-        id: 'stat-projects',
-        label: 'Активных проектов',
-        value: 15,
-        icon: '🎯',
-        sortOrder: 5,
-      },
-    }),
   ]);
 
   console.log(`✅ Created ${stats.length} impact stats`);
@@ -470,43 +554,15 @@ async function main() {
 
   const stories = await Promise.all([
     prisma.story.upsert({
-      where: { slug: 'masha-story' },
-      update: {},
-      create: {
-        title: 'Когда Маша вернулась к жизни',
-        slug: 'masha-story',
-        excerpt: 'История о том, как поддержка фонда помогла 7-летней Маше справиться с тяжёлой болезнью и вернуться к нормальной жизни.',
-        content: `Маше было 7 лет, когда ей поставили диагноз, который перевернул жизнь всей семьи. Родители не знали, где искать помощь — дорогостоящее лечение было не по карману.
-
-В фонд Гуденко они обратились по рекомендации знакомых. За 48 часов мы собрали средства на первый этап лечения. Дальше — реабилитация, поддержка психолога, помощь родителям с работой.
-
-Сегодня Маша ходит в обычную школу, рисует картины и мечтает стать врачом. "Я хочу помогать людям так же, как помогли мне", — говорит она.
-
-Эта история — одна из сотен. За каждой цифрой в нашей статистике стоит живой человек со своей судьбой.`,
-        image: '/images/stories/masha.jpg',
-        personName: 'Маша К.',
-        personAge: 7,
-        location: 'Москва',
-        category: 'Медицина',
-        isPublished: true,
-        isFeatured: true,
-        publishedAt: new Date('2024-01-15'),
-      },
-    }),
-    prisma.story.upsert({
       where: { slug: 'ivan-story' },
       update: {},
       create: {
         title: 'Иван: от интерната до университета',
         slug: 'ivan-story',
         excerpt: 'Как образовательная программа фонда помогла талантливому подростку из детского дома поступить в престижный вуз.',
-        content: `Ваня вырос в детском доме. В 15 лет он увлёкся программированием, но у него не было компьютера и доступа к интернету. Социальные педагоги связались с фондом.
+        content: `Ваня вырос в детском доме. В 15 лет он увлёкся программированием, но у него не было компьютера. Фонд обеспечил всем необходимым.
 
-Мы обеспечили Ваню всем необходимым: ноутбук, интернет, курсы программирования. Но главное — ментор. Программист из нашей команды стал для Вани наставником.
-
-Через два года Ваня занял первое место на региональной олимпиаде по информатике. Сейчас он студент первого курса одного из лучших технических вузов страны.
-
-"Фонд дал мне не только ресурсы, но и веру в себя", — говорит Иван.`,
+Через два года Ваня занял первое место на региональной олимпиаде. Сейчас он студент первого курса технического вуза.`,
         image: '/images/stories/ivan.jpg',
         personName: 'Иван С.',
         personAge: 17,
@@ -515,26 +571,6 @@ async function main() {
         isPublished: true,
         isFeatured: true,
         publishedAt: new Date('2024-02-20'),
-      },
-    }),
-    prisma.story.upsert({
-      where: { slug: 'family-petrov' },
-      update: {},
-      create: {
-        title: 'Семья Петровых: новый дом',
-        slug: 'family-petrov',
-        excerpt: 'История о том, как семья с тремя детьми после пожара получила помощь и начала новую жизнь.',
-        content: `Пожар уничтожил всё: дом, вещи, документы. Семья Петровых с тремя детьми осталась на улице посреди зимы. Соседи приютили, но это было временное решение.
-
-Фонд подключился в течение суток. Сначала — временное жильё, одежда, продукты. Затем — помощь с документами и сбор средств на восстановление дома.
-
-Через восемь месяцев семья въехала в новый дом. "Мы не просто получили крышу над головой, — говорит мама. — Мы обрели людей, которые реально помогают".`,
-        image: '/images/stories/petrov-family.jpg',
-        personName: 'Семья Петровых',
-        location: 'Тверская область',
-        category: 'Социальная поддержка',
-        isPublished: true,
-        publishedAt: new Date('2024-03-10'),
       },
     }),
   ]);

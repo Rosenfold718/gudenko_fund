@@ -64,13 +64,23 @@ export function ProductCard({
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = React.useState(false);
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <article
+      onClick={handleClick}
       className={cn(
         "group relative bg-white rounded-2xl overflow-hidden",
         "border border-gray-100",
         "transition-all duration-300 ease-out",
-        "hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1"
+        "hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1",
+        "cursor-pointer"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -160,7 +170,7 @@ export function ProductCard({
           </span>
 
           <button
-            onClick={onClick}
+            type="button"
             disabled={inStock === 0}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-full",
