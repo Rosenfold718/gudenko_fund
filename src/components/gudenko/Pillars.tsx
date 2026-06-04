@@ -17,48 +17,40 @@ interface PillarsProps {
 }
 
 // Map pillars to gradient colors and icons - supports both Russian and English slugs
-const pillarStyles: Record<string, { gradient: string; icon: React.ElementType; pattern: string }> = {
+const pillarStyles: Record<string, { gradient: string; icon: React.ElementType }> = {
   // Russian slugs
   "zdravookhranenie": {
     gradient: "from-[#E62828] to-[#FF6B35]",
     icon: Heart,
-    pattern: "pattern-hearts"
   },
   "obrazovanie": {
     gradient: "from-[#3A539B] to-[#6BB6FF]",
     icon: GraduationCap,
-    pattern: "pattern-people"
   },
   "ekologiya": {
     gradient: "from-[#8BC34A] to-[#FFEB3B]",
     icon: Leaf,
-    pattern: "pattern-leaves"
   },
   // English slugs (used in database)
   "medicine": {
     gradient: "from-[#E62828] to-[#FF6B35]",
     icon: Heart,
-    pattern: "pattern-hearts"
   },
   "education": {
     gradient: "from-[#3A539B] to-[#6BB6FF]",
     icon: GraduationCap,
-    pattern: "pattern-people"
   },
   "ecology": {
     gradient: "from-[#8BC34A] to-[#FFEB3B]",
     icon: Leaf,
-    pattern: "pattern-leaves"
   },
   "social": {
     gradient: "from-[#E62129] to-[#F15A29]",
     icon: Users,
-    pattern: "pattern-people"
   },
   "culture": {
     gradient: "from-[#7CDA28] to-[#F7E934]",
     icon: Music,
-    pattern: "pattern-leaves"
   },
 };
 
@@ -129,16 +121,23 @@ export function Pillars({ pillars }: PillarsProps) {
                 href={`#${pillar.slug}`}
                 className={cn(
                   "group relative aspect-[3/4] rounded-3xl overflow-hidden",
-                  "bg-gradient-to-br",
-                  style.gradient,
-                  style.pattern,
                   "hover:shadow-2xl hover:scale-[1.02]",
                   "transition-all duration-500",
                   isVisible ? "animate-scale-in" : "opacity-0"
                 )}
                 style={{ animationDelay: `${(index + 1) * 150}ms` }}
               >
-                <div className="absolute inset-0 p-6 lg:p-8 flex flex-col justify-between text-white">
+                {/* Gradient Background */}
+                <div className={cn(
+                  "absolute inset-0 bg-gradient-to-br",
+                  style.gradient
+                )} />
+                
+                {/* Pattern Overlay */}
+                <div className="absolute inset-0 opacity-10 pattern-hearts" />
+                
+                {/* Content */}
+                <div className="relative z-10 h-full p-6 lg:p-8 flex flex-col justify-between text-white">
                   {/* Top */}
                   <div>
                     <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
