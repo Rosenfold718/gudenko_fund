@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Heart, Phone, Users, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowRight, Heart, Phone, Users, CheckCircle2, Loader2, ExternalLink } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+
+// Alfa Bank payment link
+const ALFA_BANK_PAYMENT_URL = "https://pay.alfabank.ru/sc/TlAcSjgTsdGPAPUI";
 
 interface CTASectionProps {
   variant: "donate" | "help" | "volunteer";
@@ -89,6 +92,7 @@ export function CTASection({ variant }: CTASectionProps) {
   const [selectedAreas, setSelectedAreas] = React.useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
   
   const config = ctaConfigs[variant];
   const Icon = config.icon;
@@ -121,20 +125,81 @@ export function CTASection({ variant }: CTASectionProps) {
     setSelectedAreas([]);
     setIsSubmitting(false);
     setIsSuccess(false);
+    setError(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
+  const getFinalAmount = () => {
+    return customAmount ? parseInt(customAmount) : selectedAmount;
+  };
+
+  // Handle donation - redirect to Alfa Bank
+  const handleDonation = () => {
+    const amount = getFinalAmount();
+    // Alfa Bank payment link with amount parameter
+    const paymentUrl = `${ALFA_BANK_PAYMENT_URL}?amount=${amount}`;
     
+    // Open in new tab
+    window.open(paymentUrl, "_blank");
+    
+    // Show success and close modal
+    setIsSuccess(true);
     setTimeout(() => {
       setIsSuccess(false);
       setModalOpen(false);
       resetForm();
     }, 2000);
+  };
+
+  // Handle help/volunteer form submission - send email
+  const handleEmailSubmit = async () => {
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: variant,
+          name,
+          phone,
+          email: variant === "volunteer" ? email : undefined,
+          situation: variant === "help" ? situation : undefined,
+          areas: variant === "volunteer" ? selectedAreas : undefined,
+          message: variant === "volunteer" ? message : undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Ошибка при отправке");
+      }
+
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setModalOpen(false);
+        resetForm();
+      }, 2500);
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Произошла ошибка");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (variant === "donate") {
+      handleDonation();
+    } else {
+      await handleEmailSubmit();
+    }
   };
 
   const toggleArea = (areaId: string) => {
@@ -153,12 +218,12 @@ export function CTASection({ variant }: CTASectionProps) {
             <CheckCircle2 className="w-8 h-8 text-green-600" />
           </div>
           <h3 className="text-xl font-semibold mb-2">
-            {variant === "donate" && "Спасибо за вашу помощь!"}
+            {variant === "donate" && "Переход к оплате..."}
             {variant === "help" && "Заявка отправлена!"}
             {variant === "volunteer" && "Добро пожаловать в команду!"}
           </h3>
           <p className="text-muted-foreground">
-            {variant === "donate" && "Мы отправили подтверждение на вашу почту"}
+            {variant === "donate" && "Окно оплаты откроется в новой вкладке"}
             {variant === "help" && "Мы свяжемся с вами в ближайшее время"}
             {variant === "volunteer" && "Мы свяжемся с вами в ближайшее время"}
           </p>
@@ -176,11 +241,17 @@ export function CTASection({ variant }: CTASectionProps) {
             <DialogTitle className="text-2xl">{config.buttonText}</DialogTitle>
           </div>
           <DialogDescription>
-            {variant === "donate" && "Выберите сумму или введите свою. Каждое пожертвование идёт на помощь нуждающимся."}
+            {variant === "donate" && "Выберите сумму пожертвования. После нажатия кнопки вы перейдёте на страницу оплаты Альфа-Банка."}
             {variant === "help" && "Заполните форму, и наши специалисты свяжутся с вами для обсуждения вашей ситуации."}
             {variant === "volunteer" && "Присоединяйтесь к нашей команде! Заполните форму, и мы пригласим вас на знакомство."}
           </DialogDescription>
         </DialogHeader>
+        
+        {error && (
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+            {error}
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           {variant === "donate" && (
@@ -216,36 +287,22 @@ export function CTASection({ variant }: CTASectionProps) {
                       setCustomAmount(e.target.value);
                     }}
                     className="pr-10"
+                    min="1"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">₽</span>
                 </div>
               </div>
-              <div>
-                <Label htmlFor="donor-name">Ваше имя</Label>
-                <Input
-                  id="donor-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Как к вам обращаться?"
-                  className="mt-1"
-                  required
-                />
+              
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <p className="text-sm text-amber-800">
+                  <strong>Важно:</strong> После нажатия кнопки вы будете перенаправлены на защищённую страницу оплаты Альфа-Банка.
+                  Чек об оплате придёт на вашу электронную почту от банка.
+                </p>
               </div>
-              <div>
-                <Label htmlFor="donor-email">Email</Label>
-                <Input
-                  id="donor-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Для отправки чека"
-                  className="mt-1"
-                  required
-                />
-              </div>
+
               <Button
                 type="submit"
-                disabled={!name || !email || isSubmitting}
+                disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-[#E62129] to-[#F15A29] hover:opacity-90"
               >
                 {isSubmitting ? (
@@ -254,7 +311,10 @@ export function CTASection({ variant }: CTASectionProps) {
                     Обработка...
                   </>
                 ) : (
-                  `Пожертвовать ${(customAmount ? parseInt(customAmount) : selectedAmount).toLocaleString()} ₽`
+                  <>
+                    Оплатить {getFinalAmount().toLocaleString()} ₽
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </>
                 )}
               </Button>
             </>
