@@ -135,8 +135,10 @@ export function CTASection({ variant }: CTASectionProps) {
   // Handle donation - redirect to Alfa Bank
   const handleDonation = () => {
     const amount = getFinalAmount();
-    // Alfa Bank payment link with amount parameter
-    const paymentUrl = `${ALFA_BANK_PAYMENT_URL}?amount=${amount}`;
+    // Alfa Bank expects amount in kopecks (multiply by 100)
+    // Example: 100 rubles = 10000 kopecks
+    const amountInKopecks = amount * 100;
+    const paymentUrl = `${ALFA_BANK_PAYMENT_URL}?amount=${amountInKopecks}`;
     
     // Open in new tab
     window.open(paymentUrl, "_blank");
