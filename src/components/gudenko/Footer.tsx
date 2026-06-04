@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Heart, Mail, Phone, MapPin, Download, Code2 } from "lucide-react";
+import { Mail, Phone, MapPin, Download, Code2 } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -49,10 +49,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Logo & Description */}
           <div className="lg:col-span-2">
-            <a href="#" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E62129] to-[#FF6B35] flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white" fill="white" />
-              </div>
+            <a href="#" className="flex items-center gap-3 mb-6">
+              <img 
+                src="/images/logo.jpg" 
+                alt="Фонд Гуденко" 
+                className="w-10 h-10 rounded-xl object-cover"
+              />
               <span className="font-display text-xl font-bold">
                 Фонд Гуденко
               </span>

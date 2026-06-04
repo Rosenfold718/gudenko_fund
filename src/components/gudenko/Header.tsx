@@ -81,11 +81,13 @@ export function Header() {
           {/* Logo */}
           <a
             href="#"
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-3 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E62129] to-[#FF6B35] flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" fill="white" />
-            </div>
+            <img 
+              src="/images/logo.jpg" 
+              alt="Фонд Гуденко" 
+              className="w-10 h-10 rounded-xl object-cover"
+            />
             <span className="font-display text-xl font-bold text-foreground group-hover:text-[#E62129] transition-colors">
               Фонд Гуденко
             </span>
