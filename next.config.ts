@@ -18,6 +18,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  
+  // Явно объявляем переменные окружения
+  env: {
+    TURSO_URL: process.env.TURSO_URL,
+    TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
+    DATABASE_URL: process.env.DATABASE_URL,
+  },
 };
 
 export default nextConfig;
