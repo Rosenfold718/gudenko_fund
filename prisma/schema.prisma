@@ -1,32 +1,259 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// ═══════════════════════════════════════════════════════════════
+// GUDENKO FUND — Premium Charity Marketplace
+// Prisma Schema for Toys, Categories, Orders
+// ═══════════════════════════════════════════════════════════════
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "sqlite"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// ═══════════════════════════════════════════════════════════════
+// MARKETPLACE MODELS
+// ═══════════════════════════════════════════════════════════════
+
+/// Категории игрушек
+model Category {
+  id          String    @id @default(cuid())
+  name        String    // "Медведи", "Зайцы", "Куклы"
+  slug        String    @unique // "bears", "rabbits", "dolls"
+  description String?   // Описание категории
+  icon        String?   // Эмодзи или иконка
+  image       String?   // Изображение категории
+  sortOrder   Int       @default(0) // Порядок сортировки
+  
+  products    Product[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@map("categories")
 }
 
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+/// Игрушки ручной работы
+model Product {
+  id            String    @id @default(cuid())
+  name          String    // "Мишка Тёпа"
+  slug          String    @unique // "mishka-tepa"
+  description   String    // Полное описание
+  shortDesc     String?   // Краткое описание для карточки
+  
+  price         Int       // Цена в копейках (250000 = 2500 ₽)
+  comparePrice  Int?      // Старая цена для скидки
+  
+  images        String    // JSON массив URL изображений
+  mainImage     String    // Главное изображение
+  
+  categoryId    String
+  category      Category  @relation(fields: [categoryId], references: [id])
+  
+  inStock       Int       @default(1)  // Количество в наличии
+  sku           String?   @unique      // Артикул
+  
+  // Характеристики
+  height        Int?      // Высота в см
+  width         Int?      // Ширина в см
+  weight        Int?      // Вес в граммах
+  material      String?   // Материал (хлопок, лён...)
+  filler        String?   // Наполнитель (синтепух...)
+  
+  // Рейтинг и отзывы
+  rating        Float     @default(0)
+  reviewsCount  Int       @default(0)
+  
+  // Статус
+  isActive      Boolean   @default(true)
+  isFeatured    Boolean   @default(false) // Рекомендуемый
+  isNew         Boolean   @default(false) // Новинка
+  
+  sortOrder     Int       @default(0)
+  
+  reviews       Review[]
+  orderItems    OrderItem[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@map("products")
+}
+
+/// Отзывы покупателей
+model Review {
+  id          String    @id @default(cuid())
+  rating      Int       // 1-5
+  text        String?   // Текст отзыва
+  author      String    // Имя автора
+  email       String?   // Email (скрыт)
+  
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+  
+  isApproved  Boolean   @default(false) // Модерация
+  
+  createdAt   DateTime  @default(now())
+  
+  @@map("reviews")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ORDER MODELS
+// ═══════════════════════════════════════════════════════════════
+
+/// Заказы
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique // "GF-2024-0001"
+  
+  status        OrderStatus @default(NEW)
+  
+  // Данные покупателя
+  customerName  String
+  email         String
+  phone         String
+  
+  // Доставка
+  deliveryType  DeliveryType
+  address       String?     // Для доставки
+  city          String?
+  postalCode    String?
+  comment       String?     // Комментарий к заказу
+  
+  // Суммы (в копейках)
+  subtotal      Int         // Сумма товаров
+  deliveryCost  Int         @default(0)
+  total         Int         // Итого
+  
+  // Оплата
+  paymentMethod PaymentMethod @default(CARD)
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentId     String?     // ID транзакции
+  
+  items         OrderItem[]
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  @@map("orders")
+}
+
+/// Позиции заказа
+model OrderItem {
+  id          String  @id @default(cuid())
+  
+  orderId     String
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+  
+  productName String  // На момент заказа
+  price       Int     // Цена на момент заказа (копейки)
+  quantity    Int     @default(1)
+  
+  @@map("order_items")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STORYTELLING MODELS
+// ═══════════════════════════════════════════════════════════════
+
+/// Истории подопечных
+model Story {
+  id          String    @id @default(cuid())
+  title       String    // Заголовок
+  slug        String    @unique
+  excerpt     String    // Краткое описание
+  content     String    // Полный текст
+  
+  image       String    // Главное фото
+  images      String?   // JSON массив дополнительных фото
+  
+  personName  String?   // Имя героя истории
+  personAge   Int?      // Возраст
+  location    String?   // Город/регион
+  
+  category    String?   // "Медицина", "Образование"...
+  
+  isPublished Boolean   @default(false)
+  isFeatured  Boolean   @default(false)
+  publishedAt DateTime?
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@map("stories")
+}
+
+/// Направления работы фонда
+model Pillar {
+  id          String    @id @default(cuid())
+  title       String    // "Образование"
+  slug        String    @unique
+  description String    // Описание направления
+  
+  icon        String    // Эмодзи или иконка
+  image       String?   // Изображение
+  
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@map("pillars")
+}
+
+/// Статистика фонда
+model ImpactStat {
+  id          String    @id @default(cuid())
+  label       String    // "Семей поддержано"
+  value       Int       // 847
+  suffix      String?   // "+", "M", "лет"
+  icon        String?   // Эмодзи
+  
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@map("impact_stats")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════════════════════════
+
+enum OrderStatus {
+  NEW         // Новый заказ
+  PROCESSING  // В обработке
+  CONFIRMED   // Подтверждён
+  SHIPPED     // Отправлен
+  DELIVERED   // Доставлен
+  CANCELLED   // Отменён
+}
+
+enum DeliveryType {
+  PICKUP      // Самовывоз
+  COURIER     // Курьер
+  POST        // Почта России
+  CDEK        // СДЭК
+}
+
+enum PaymentMethod {
+  CARD        // Банковская карта
+  SBP         // Система быстрых платежей
+  CASH        // Наличные при получении
+}
+
+enum PaymentStatus {
+  PENDING     // Ожидает оплаты
+  PAID        // Оплачено
+  FAILED      // Ошибка оплаты
+  REFUNDED    // Возврат
 }
