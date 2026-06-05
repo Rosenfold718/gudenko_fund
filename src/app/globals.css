@@ -52,6 +52,10 @@
   --radius-2xl: calc(var(--radius) + 8px);
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   LIGHT THEME (default)
+   ═══════════════════════════════════════════════════════════════ */
+
 :root {
   /* Base Radius */
   --radius: 0.75rem;
@@ -88,6 +92,41 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   DARK THEME
+   ═══════════════════════════════════════════════════════════════ */
+
+.dark {
+  --background: #0F0F0F;
+  --foreground: #FAFAFA;
+  --card: #1A1A1A;
+  --card-foreground: #FAFAFA;
+  --popover: #1A1A1A;
+  --popover-foreground: #FAFAFA;
+  --primary: #FF4444;
+  --primary-foreground: #FFFFFF;
+  --secondary: #2A2A2A;
+  --secondary-foreground: #FAFAFA;
+  --muted: #2A2A2A;
+  --muted-foreground: #A1A1AA;
+  --accent: #5A8FFF;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #2A2A2A;
+  --input: #2A2A2A;
+  --ring: #FF4444;
+  
+  /* Dark mode brand colors - slightly brighter for contrast */
+  --brand-red: #FF4444;
+  --brand-orange: #FF7A4D;
+  --brand-blue: #5A7FFF;
+  --brand-light-blue: #8AC8FF;
+  --brand-green: #9AE846;
+  --brand-yellow: #FFE95A;
+  --brand-navy: #5A8FFF;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    TYPOGRAPHY SCALE — Modern & Friendly
    ═══════════════════════════════════════════════════════════════ */
 
@@ -106,6 +145,8 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans), system-ui, sans-serif;
     font-feature-settings: "kern" 1, "liga" 1;
+    /* Smooth theme transition */
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   /* Display Headings — Unbounded */
@@ -204,6 +245,10 @@
     -webkit-backdrop-filter: blur(12px);
   }
   
+  .dark .glass {
+    background: rgba(26, 26, 26, 0.9);
+  }
+  
   /* Custom Scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
@@ -211,12 +256,12 @@
   }
   
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #F5F5F5;
+    background: var(--muted);
     border-radius: 3px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #E62129;
+    background: var(--brand-red);
     border-radius: 3px;
   }
   
@@ -231,20 +276,22 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ANIMATIONS — Smooth & Friendly
+   SMOOTH ANIMATIONS — Optimized for performance
    ═══════════════════════════════════════════════════════════════ */
 
+/* GPU-accelerated fade in from bottom */
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 
+/* Simple fade */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -254,40 +301,81 @@
   }
 }
 
+/* Gentle scale */
 @keyframes scale-in {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.96) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
   }
 }
 
+/* Subtle float animation */
 @keyframes float {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px) translateZ(0);
   }
 }
 
+/* Smooth slide in from left */
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateZ(0);
+  }
+}
+
+/* Smooth slide in from right */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateZ(0);
+  }
+}
+
+/* Animation classes with will-change for GPU acceleration */
 .animate-fade-in-up {
-  animation: fade-in-up 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  will-change: opacity, transform;
+  animation: fade-in-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
+  will-change: opacity;
+  animation: fade-in 0.6s ease-out forwards;
 }
 
 .animate-scale-in {
-  animation: scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  will-change: opacity, transform;
+  animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  will-change: transform;
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-slide-in-left {
+  will-change: opacity, transform;
+  animation: slide-in-left 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-slide-in-right {
+  will-change: opacity, transform;
+  animation: slide-in-right 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* Staggered Animation Delays */
@@ -296,3 +384,60 @@
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* ═══════════════════════════════════════════════════════════════
+   SMOOTH TRANSITIONS — For interactive elements
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Standard smooth transition for all interactive elements */
+.smooth-transition {
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), 
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) translateZ(0);
+}
+
+/* Smooth scale on hover */
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02) translateZ(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REDUCED MOTION — Respect user preferences
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-float,
+  .animate-slide-in-left,
+  .animate-slide-in-right {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

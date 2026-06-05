@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Nunito_Sans, Unbounded } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/providers/theme-provider";
+import { LocaleProvider } from "@/providers/locale-provider";
 
 // Nunito Sans — тёплый, дружелюбный, современный sans-serif для основного текста
 const nunitoSans = Nunito_Sans({
@@ -106,8 +108,17 @@ export default function RootLayout({
       <body
         className={`${nunitoSans.variable} ${unbounded.variable} antialiased`}
       >
-        {children}
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <LocaleProvider>
+            {children}
+            <Toaster />
+          </LocaleProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

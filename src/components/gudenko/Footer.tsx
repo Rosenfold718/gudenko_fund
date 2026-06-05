@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { useLocale } from "@/providers/locale-provider";
 
 export function Footer() {
+  const { t } = useLocale();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -24,15 +26,14 @@ export function Footer() {
               </span>
             </a>
             <p className="text-white/60 max-w-md leading-relaxed mb-6">
-              Семейный благотворительный фонд. Помогаем вместе уже более 10 лет. 
-              Здравоохранение, образование, экология — меняем жизни к лучшему.
+              {t("footer.description")}
             </p>
             
             {/* Payment Methods */}
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-sm text-white/40">Способы оплаты:</span>
+              <span className="text-sm text-white/40">{t("footer.paymentMethods")}</span>
               <span className="px-3 py-1 bg-white/10 rounded-full text-sm">СБП</span>
-              <span className="px-3 py-1 bg-white/10 rounded-full text-sm">Карта</span>
+              <span className="px-3 py-1 bg-white/10 rounded-full text-sm">Card</span>
               <span className="px-3 py-1 bg-white/10 rounded-full text-sm">Apple Pay</span>
               <span className="px-3 py-1 bg-white/10 rounded-full text-sm">Google Pay</span>
             </div>
@@ -40,15 +41,21 @@ export function Footer() {
 
           {/* Links */}
           <div>
-            <h4 className="font-display font-bold mb-6">О фонде</h4>
+            <h4 className="font-display font-bold mb-6">{t("footer.about")}</h4>
             <ul className="space-y-3">
-              {["Наследие", "Направления", "Команда", "Документы", "Отчёты"].map((link) => (
-                <li key={link}>
+              {[ 
+                { key: "footer.heritage", href: "#about" },
+                { key: "footer.directions", href: "#directions" },
+                { key: "footer.team", href: "#" },
+                { key: "footer.documents", href: "#" },
+                { key: "footer.reports", href: "#" },
+              ].map((item) => (
+                <li key={item.key}>
                   <a
-                    href="#"
-                    className="text-white/60 hover:text-white transition-colors"
+                    href={item.href}
+                    className="text-white/60 hover:text-white transition-colors duration-300"
                   >
-                    {link}
+                    {t(item.key)}
                   </a>
                 </li>
               ))}
@@ -57,29 +64,29 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-display font-bold mb-6">Контакты</h4>
+            <h4 className="font-display font-bold mb-6">{t("footer.contacts")}</h4>
             <ul className="space-y-4">
               <li>
                 <a
                   href="mailto:info@gudenko.fund"
-                  className="flex items-center gap-3 text-white/60 hover:text-white transition-colors"
+                  className="flex items-center gap-3 text-white/60 hover:text-white transition-colors duration-300"
                 >
-                  <Mail className="w-5 h-5 text-[#E62129]" />
+                  <Mail className="w-5 h-5 text-primary" />
                   info@gudenko.fund
                 </a>
               </li>
               <li>
                 <a
                   href="tel:+78001234567"
-                  className="flex items-center gap-3 text-white/60 hover:text-white transition-colors"
+                  className="flex items-center gap-3 text-white/60 hover:text-white transition-colors duration-300"
                 >
-                  <Phone className="w-5 h-5 text-[#3A5FCD]" />
+                  <Phone className="w-5 h-5 text-accent" />
                   8 (800) 123-45-67
                 </a>
               </li>
               <li>
                 <span className="flex items-center gap-3 text-white/60">
-                  <MapPin className="w-5 h-5 text-[#7CDA28]" />
+                  <MapPin className="w-5 h-5 text-green-500" />
                   Москва, Россия
                 </span>
               </li>
@@ -91,7 +98,7 @@ export function Footer() {
                 href="https://vk.com/gudenko_fund"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#4A76A8] transition-colors"
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#4A76A8] transition-colors duration-300"
                 aria-label="VK"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -100,7 +107,7 @@ export function Footer() {
               </a>
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#0088cc] transition-colors"
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#0088cc] transition-colors duration-300"
                 aria-label="Telegram"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -116,13 +123,13 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container mx-auto px-4 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-white/40 text-sm">
-            <p>© {currentYear} Фонд Гуденко. Все права защищены.</p>
+            <p>© {currentYear} {t("footer.copyright")}</p>
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-              <a href="#" className="hover:text-white transition-colors">
-                Политика конфиденциальности
+              <a href="#" className="hover:text-white transition-colors duration-300">
+                {t("footer.privacy")}
               </a>
-              <a href="#" className="hover:text-white transition-colors">
-                Оферта
+              <a href="#" className="hover:text-white transition-colors duration-300">
+                {t("footer.offer")}
               </a>
             </div>
           </div>

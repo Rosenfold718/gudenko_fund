@@ -12,3 +12,5 @@ export { Impact } from "./Impact";
 export { Stories } from "./Stories";
 export { CTASection, CTASections } from "./CTASection";
 export { Footer } from "./Footer";
+export { ThemeToggle } from "./ThemeToggle";
+export { LocaleToggle } from "./LocaleToggle";
